@@ -12,6 +12,10 @@ class Settings(BaseSettings):
     # File Storage
     upload_dir: str = "uploads"
 
+    # ChromaDB
+    chroma_persist_dir: str = "chroma_db"
+    collection_name: str = "research_papers"
+
     # Gemini API (placeholder for future use)
     gemini_api_key: str = ""
 

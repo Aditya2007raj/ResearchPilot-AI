@@ -5,3 +5,4 @@ pydantic-settings
 python-dotenv
 pymupdf
 google-generativeai
+chromadb
