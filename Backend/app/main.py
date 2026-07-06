@@ -7,6 +7,7 @@ from .api import upload
 
 from .api import analysis
 from .api import review
+from .api import action
 
 app = FastAPI(
     title=settings.app_name,
@@ -44,6 +45,11 @@ app.include_router(
     tags=["review"]
 )
 
+app.include_router(
+    action.router,
+    prefix=settings.api_prefix,
+    tags=["action"]
+)
 @app.get("/")
 async def root():
     """Root endpoint."""
