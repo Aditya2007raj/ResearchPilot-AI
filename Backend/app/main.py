@@ -6,6 +6,7 @@ from .config import settings
 from .api import upload
 
 from .api import analysis
+from .api import review
 
 app = FastAPI(
     title=settings.app_name,
@@ -35,6 +36,12 @@ app.include_router(
     analysis.router,
     prefix=settings.api_prefix,
     tags=["analysis"]
+)
+
+app.include_router(
+    review.router,
+    prefix=settings.api_prefix,
+    tags=["review"]
 )
 
 @app.get("/")
