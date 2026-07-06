@@ -3,11 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from datetime import datetime
 
 from .config import settings
-from .api import upload
 
+from .api import upload
 from .api import analysis
 from .api import review
 from .api import action
+from .api import chat
 
 app = FastAPI(
     title=settings.app_name,
@@ -50,6 +51,13 @@ app.include_router(
     prefix=settings.api_prefix,
     tags=["action"]
 )
+
+app.include_router(
+    chat.router,
+    prefix=settings.api_prefix,
+    tags=["chat"]
+)
+
 @app.get("/")
 async def root():
     """Root endpoint."""

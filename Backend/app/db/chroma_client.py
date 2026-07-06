@@ -38,7 +38,7 @@ class ChromaClient:
         """
         return self.collection
     
-    def add_documents(self, ids: list, documents: list, metadatas: list = None):
+    def add_documents(self, ids: list, documents: list, metadatas: list = None, embeddings: list = None):
         """
         Add documents to the collection.
         
@@ -46,33 +46,38 @@ class ChromaClient:
             ids: List of document IDs
             documents: List of document texts
             metadatas: Optional list of metadata dictionaries
+            embeddings: Optional list of pre-generated embeddings
         """
         try:
             self.collection.add(
                 ids=ids,
                 documents=documents,
-                metadatas=metadatas
+                metadatas=metadatas,
+                embeddings=embeddings
             )
         except Exception as e:
             raise Exception(f"Failed to add documents: {str(e)}")
     
-    def query_documents(self, query_texts: list, n_results: int = 5, where: dict = None):
+    def query_documents(self, query_texts: list = None, query_embeddings: list = None, n_results: int = 5, where: dict = None):
         """
         Query documents from the collection.
         
         Args:
-            query_texts: List of query texts
+            query_texts: Optional list of query texts (auto-embedded)
+            query_embeddings: Optional list of pre-computed query embeddings
             n_results: Number of results to return
             where: Optional metadata filter
             
         Returns:
-            Query results
+            Query results with documents, metadatas, and distances
         """
         try:
             results = self.collection.query(
                 query_texts=query_texts,
+                query_embeddings=query_embeddings,
                 n_results=n_results,
-                where=where
+                where=where,
+                include=["documents", "metadatas", "distances"]
             )
             return results
         except Exception as e:
