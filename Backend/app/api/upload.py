@@ -46,12 +46,40 @@ async def upload_pdf(file: UploadFile = File(...)):
         vector_store = VectorStore()
         vector_store.add_document(file_id=file_id, text=full_text)
         
+        # Save metadata into SQLite store
+        import math
+        from ..db.metadata_store import add_paper
+        
+        clean_title = file.filename.replace(".pdf", "").replace("-", " ").replace("_", " ")
+        clean_title = " ".join([w.capitalize() for w in clean_title.split()])
+        
+        page_count = extraction_result.get("page_count", 1)
+        word_count = len(full_text.split())
+        reading_time_minutes = math.ceil(word_count / 200)
+        if reading_time_minutes == 0:
+            reading_time_minutes = 1
+        
+        add_paper(
+            paper_id=file_id,
+            title=clean_title,
+            authors="Extracted PDF Author",
+            year="2026",
+            file_path=file_path,
+            health="Fully Analyzed",
+            page_count=page_count,
+            reading_time_minutes=reading_time_minutes
+        )
+        
         return UploadResponse(
             file_id=file_id,
             filename=file.filename,
             file_size=file.size,
             status="uploaded",
-            uploaded_at=datetime.utcnow()
+            uploaded_at=datetime.utcnow(),
+            title=clean_title,
+            authors="Extracted PDF Author",
+            page_count=page_count,
+            reading_time_minutes=reading_time_minutes
         )
     except HTTPException:
         raise

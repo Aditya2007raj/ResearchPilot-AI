@@ -9,6 +9,11 @@ from .api import analysis
 from .api import review
 from .api import action
 from .api import chat
+from .api import papers
+from .db.metadata_store import init_db
+
+# Initialize metadata tables
+init_db()
 
 app = FastAPI(
     title=settings.app_name,
@@ -58,6 +63,12 @@ app.include_router(
     chat.router,
     prefix=settings.api_prefix,
     tags=["chat"]
+)
+
+app.include_router(
+    papers.router,
+    prefix=settings.api_prefix,
+    tags=["papers"]
 )
 
 @app.get("/")

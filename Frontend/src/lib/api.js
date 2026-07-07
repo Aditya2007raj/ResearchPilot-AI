@@ -80,4 +80,20 @@ export const api = {
     }
     return res.json();
   },
+
+  getPapers: async () => {
+    const res = await fetch(`${BASE_URL}/papers`);
+    if (!res.ok) {
+      throw new Error('Failed to fetch library papers');
+    }
+    return res.json();
+  },
+
+  getStats: async () => {
+    const res = await fetch(`${BASE_URL}/papers/stats`);
+    if (!res.ok) {
+      throw new Error('Failed to fetch dashboard statistics');
+    }
+    return res.json();
+  },
 };

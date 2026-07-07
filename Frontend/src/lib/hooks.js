@@ -39,3 +39,17 @@ export function useSendMessage(fileId) {
     mutationFn: ({ question }) => api.sendChatMessage(fileId, question),
   });
 }
+
+export function usePapersList() {
+  return useQuery({
+    queryKey: ['papers', 'list'],
+    queryFn: () => api.getPapers(),
+  });
+}
+
+export function useDashboardStats() {
+  return useQuery({
+    queryKey: ['papers', 'stats'],
+    queryFn: () => api.getStats(),
+  });
+}

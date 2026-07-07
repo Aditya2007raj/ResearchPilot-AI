@@ -72,12 +72,11 @@ export function UploadPage() {
     uploadMutation.mutate(selectedFile, {
       onSuccess: (data) => {
         setIngestedId(data.file_id);
-        const cleanName = selectedFile.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
         setMeta({
-          title: cleanName.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
-          author: 'Author Info (Analyzed Summary)',
-          pageCount: 12, // Default fallback, overwritten during Analysis GET
-          readingTime: '15 min read'
+          title: data.title || file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' '),
+          author: data.authors || 'Extracted PDF Author',
+          pageCount: data.page_count || 1,
+          readingTime: `${data.reading_time_minutes || 5} min read`
         });
         setUploadState(UPLOAD_STATES.SUCCESS);
       },

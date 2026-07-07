@@ -10,6 +10,10 @@ class UploadResponse(BaseModel):
     file_size: int
     status: str
     uploaded_at: datetime
+    title: str
+    authors: str
+    page_count: int
+    reading_time_minutes: int
 
 
 class ErrorResponse(BaseModel):
