@@ -1,0 +1,105 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@layer base {
+  :root {
+    /* Theme State - Dark Theme First Defaults */
+    --bg-base: #0b0b0c;
+    --bg-surface: #161618;
+    
+    --text-primary: #f3f4f6;
+    --text-secondary: #9ca3af;
+    --text-muted: #6b7280;
+
+    --accent-indigo: #6366f1;
+    --accent-indigo-hover: #4f46e5;
+    --accent-cyan: #06b6d4;
+    --accent-cyan-hover: #0891b2;
+
+    --border-subtle: #27272a;
+    --border-focus: #4f46e5;
+
+    /* Design Tokens - Typography System */
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    /* Design Tokens - Spacing System */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    --space-2xl: 48px;
+    --space-3xl: 64px;
+
+    /* Design Tokens - Border Radii */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-full: 9999px;
+
+    /* Design Tokens - Transitions */
+    --transition-fast: 150ms ease;
+    --transition-normal: 250ms ease;
+  }
+
+  /* Reserved structure for future Light Theme expansion */
+  :root.light {
+    --bg-base: #fafafa;
+    --bg-surface: #ffffff;
+    
+    --text-primary: #111827;
+    --text-secondary: #4b5563;
+    --text-muted: #9ca3af;
+
+    --accent-indigo: #4f46e5;
+    --accent-indigo-hover: #3730a3;
+    --accent-cyan: #0891b2;
+    --accent-cyan-hover: #0f766e;
+
+    --border-subtle: #e5e7eb;
+    --border-focus: #3730a3;
+  }
+
+  /* Base resets */
+  body {
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  /* Technical data & monospace formatting defaults */
+  .technical-data {
+    font-family: var(--font-mono);
+  }
+
+  /* Keyboard accessibility focus ring */
+  *:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 2px;
+  }
+
+  /* Premium scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--bg-base);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-subtle);
+    border-radius: var(--radius-sm);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+  }
+}

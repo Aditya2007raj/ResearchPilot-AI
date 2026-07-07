@@ -1,0 +1,28 @@
+export const themes = {
+  dark: {
+    bgBase: '#0b0b0c',
+    bgSurface: '#161618',
+    textPrimary: '#f3f4f6',
+    textSecondary: '#9ca3af',
+    textMuted: '#6b7280',
+    accentIndigo: '#6366f1',
+    accentIndigoHover: '#4f46e5',
+    accentCyan: '#06b6d4',
+    accentCyanHover: '#0891b2',
+    borderSubtle: '#27272a',
+    borderFocus: '#4f46e5',
+  },
+  light: {
+    bgBase: '#fafafa',
+    bgSurface: '#ffffff',
+    textPrimary: '#111827',
+    textSecondary: '#4b5563',
+    textMuted: '#9ca3af',
+    accentIndigo: '#4f46e5',
+    accentIndigoHover: '#3730a3',
+    accentCyan: '#0891b2',
+    accentCyanHover: '#0f766e',
+    borderSubtle: '#e5e7eb',
+    borderFocus: '#3730a3',
+  },
+};
