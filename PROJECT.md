@@ -42,6 +42,8 @@ $$\text{Ingest/Upload} \longrightarrow \text{Analyze Summary} \longrightarrow \t
 ## 3. Current Product Status
 
 - **Completed & Verified:**
+  - Interactive ResearchOS Landing Page.
+  - Gemini Multi-Key Failover System.
   - Ingestion (Drag-and-Drop, upload progress pipeline, and file limits verification).
   - SQLite Metadata store initialization and schema migration scripts.
   - Workspace Layout shell featuring a collapsible dynamic References Panel.
@@ -110,7 +112,7 @@ frontend/
 
 ### Routing Structure
 All routes are managed via `react-router-dom`:
-- `/` $\rightarrow$ Redirect to Dashboard
+- `/` $\rightarrow$ `LandingPage` (Outcome-based ResearchOS preview and widgets)
 - `/dashboard` $\rightarrow$ `DashboardPage`
 - `/papers/upload` $\rightarrow$ `UploadPage`
 - `/workspace/:paperId` $\rightarrow$ `WorkspaceLayout` (Parent layout router)
@@ -129,7 +131,7 @@ backend/
 │   ├── api/          # upload.py, analysis.py, review.py, action.py, chat.py, papers.py
 │   ├── db/           # chroma_client.py, vector_store.py, metadata_store.py
 │   ├── models/       # schemas.py
-│   ├── services/     # pdf_processor.py, text_chunker.py, embedding_service.py, rag_engine.py...
+│   ├── services/     # pdf_processor.py, text_chunker.py, embedding_service.py, rag_engine.py, gemini_key_manager.py...
 │   └── main.py       # FastAPI application entrypoint
 ```
 
@@ -263,7 +265,14 @@ Manages metadata cataloging, statuses, and statistics.
 
 Create a `.env` file in the backend root directory:
 ```env
+# Multi-key setup (comma-separated list)
+GEMINI_API_KEYS="key1,key2,key3"
+
+# Single-key fallback (backward compatibility)
 GEMINI_API_KEY="your-google-gemini-api-key"
+
+# Configured Gemini model name
+GEMINI_MODEL="gemini-2.5-flash"
 ```
 
 ---

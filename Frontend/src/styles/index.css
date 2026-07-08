@@ -47,19 +47,19 @@
 
   /* Reserved structure for future Light Theme expansion */
   :root.light {
-    --bg-base: #fafafa;
-    --bg-surface: #ffffff;
+    --bg-base: #FAF7F2;
+    --bg-surface: #FFFDF8;
     
-    --text-primary: #111827;
-    --text-secondary: #4b5563;
-    --text-muted: #9ca3af;
+    --text-primary: #1F1A17;
+    --text-secondary: #5A514A;
+    --text-muted: #847A72;
 
     --accent-indigo: #4f46e5;
     --accent-indigo-hover: #3730a3;
-    --accent-cyan: #0891b2;
-    --accent-cyan-hover: #0f766e;
+    --accent-cyan: #C0841A;
+    --accent-cyan-hover: #A06C10;
 
-    --border-subtle: #e5e7eb;
+    --border-subtle: #E8DDD0;
     --border-focus: #3730a3;
   }
 

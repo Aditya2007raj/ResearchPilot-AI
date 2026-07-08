@@ -16,8 +16,10 @@ class Settings(BaseSettings):
     chroma_persist_dir: str = "chroma_db"
     collection_name: str = "research_papers"
 
-    # Gemini API (placeholder for future use)
+    # Gemini API settings
     gemini_api_key: str = ""
+    gemini_api_keys: str = ""
+    gemini_model: str = "gemini-2.5-flash"
 
     class Config:
         env_file = ".env"

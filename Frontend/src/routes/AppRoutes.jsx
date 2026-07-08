@@ -38,15 +38,16 @@ function WorkspacePlaceholder() {
   );
 }
 
+import { LandingPage } from '../features/landing/LandingPage';
+
 const router = createBrowserRouter([
   {
     path: '/',
+    element: <LandingPage />,
+  },
+  {
     element: <AppShell />,
     children: [
-      {
-        index: true,
-        element: <Navigate to={ROUTES.DASHBOARD} replace />,
-      },
       {
         path: ROUTES.DASHBOARD,
         element: <DashboardPage />,

@@ -15,7 +15,7 @@ export function ThemeProvider({ children }) {
 
   useEffect(() => {
     const root = window.document.documentElement;
-    
+
     // Manage class mappings on HTML root element
     if (theme === 'light') {
       root.classList.add('light');
@@ -24,7 +24,7 @@ export function ThemeProvider({ children }) {
       root.classList.add('dark');
       root.classList.remove('light');
     }
-    
+
     localStorage.setItem('researchpilot-theme', theme);
   }, [theme]);
 
