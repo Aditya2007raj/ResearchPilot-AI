@@ -35,6 +35,10 @@
 
 **ResearchPilot** is a full-stack, citation-grounded AI research workspace. Instead of skimming a paper for hours or trusting a chatbot that quietly hallucinates statistics, you upload a PDF and get a structured, verifiable workspace: summary, critical review, replication roadmap, and a RAG chat — every claim traceable back to the exact source chunk it came from.
 
+The vision: **GitHub + Notion + Perplexity, built for academic research** — one workspace to ingest, analyze, critically evaluate, plan, and discuss scientific papers.
+
+An interactive **ResearchOS landing page** introduces the product, and a **Gemini multi-key failover system** keeps the AI pipeline resilient under rate limits.
+
 ### 🎯 The Problem
 
 Academic research workflows are fragmented and slow:
@@ -53,6 +57,10 @@ Academic research workflows are fragmented and slow:
 ---
 
 ## 📸 Project Preview
+
+**Landing Page**
+
+![Landing Page](./Screenshots/landing_page.gif)
 
 | Dashboard | Analyze |
 |:---:|:---:|
@@ -77,10 +85,11 @@ flowchart TD
     C --> D[Text Chunker<br/>1000 chars · 200 overlap]
     D --> E[Sentence-Transformer Embeddings<br/>all-MiniLM-L6-v2 · 384-dim]
     E --> F[(ChromaDB Vector Store)]
-    F --> G[Gemini LLM]
+    F --> GK[Gemini Key Manager<br/>Multi-Key Failover]
+    GK --> G[Gemini LLM]
     G --> H[Summary · Review · Action Plan]
     F --> I[RAG Retrieval<br/>Top-5 Chunks]
-    I --> G
+    I --> GK
     G --> J[Chat Answer + Confidence + Citations]
     H --> A
     J --> A
@@ -111,7 +120,7 @@ ResearchPilot/
 │   │   ├── api/          # upload.py, analysis.py, review.py, action.py, chat.py, papers.py
 │   │   ├── db/            # chroma_client.py, vector_store.py, metadata_store.py
 │   │   ├── models/        # schemas.py
-│   │   ├── services/      # pdf_processor.py, text_chunker.py, embedding_service.py, rag_engine.py
+│   │   ├── services/      # pdf_processor.py, text_chunker.py, embedding_service.py, rag_engine.py, gemini_key_manager.py, gemini_key_manager.py
 │   │   └── main.py
 │   ├── requirements.txt
 │   └── .env.example
@@ -120,6 +129,7 @@ ResearchPilot/
 │   ├── src/
 │   │   ├── components/layout/    # Sidebar.jsx, Topbar.jsx, AppShell.jsx
 │   │   ├── features/
+│   │   │   ├── landing/          # LandingPage.jsx
 │   │   │   ├── dashboard/
 │   │   │   ├── upload/
 │   │   │   └── workspace/        # AnalyzePage, ReviewPage, ActionPlanPage, ChatPage
@@ -155,7 +165,7 @@ pip install -r requirements.txt
 ### 3. Configure Environment
 ```bash
 cp .env.example .env
-# Add your GEMINI_API_KEY
+# Add GEMINI_API_KEYS (comma-separated), GEMINI_MODEL
 ```
 
 ### 4. Run Backend
@@ -176,7 +186,9 @@ npm run dev
 
 | Variable | Description |
 |---|---|
-| `GEMINI_API_KEY` | Google Gemini API key powering analysis, review, and chat |
+| `GEMINI_API_KEYS` | Comma-separated list of Gemini API keys, used in a failover rotation |
+| `GEMINI_API_KEY` | Single-key fallback (backward compatibility) |
+| `GEMINI_MODEL` | Gemini model name, e.g. `gemini-2.5-flash` |
 
 ---
 
@@ -250,16 +262,18 @@ npm run dev
 
 | | | |
 |---|---|---|
-| 📤 Drag-and-Drop Ingestion | 🧠 AI Summarization | 📊 Live Dashboard Stats |
-| 🔍 Critical Quality Review | 🗺️ Replication Action Plan | 💬 RAG Chat with Citations |
-| 📎 Clickable Source References | 🎯 Confidence Scoring | 🧩 Progressive Disclosure UI |
-| 🌙 Academic Dark Theme | ⚡ FastAPI Backend | 🧱 Clean Modular Architecture |
+| 🛬 Interactive Landing Page | 📤 Drag-and-Drop Ingestion | 🧠 AI Summarization |
+| 📊 Live Dashboard Stats | 🔍 Critical Quality Review | 🗺️ Replication Action Plan |
+| 💬 RAG Chat with Citations | 📎 Clickable Source References | 🎯 Confidence Scoring |
+| 🧩 Progressive Disclosure UI | 🌙 Academic Dark Theme | 🔁 Gemini Multi-Key Failover |
 
 ---
 
 ## 📌 Current Status
 
 **✅ Completed**
+- Interactive ResearchOS landing page
+- Gemini multi-key failover system for API resilience
 - Drag-and-drop ingestion with progress pipeline and file validation
 - SQLite metadata store with schema migrations
 - Workspace shell with collapsible References panel
