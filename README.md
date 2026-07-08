@@ -56,15 +56,15 @@ Academic research workflows are fragmented and slow:
 
 | Dashboard | Analyze |
 |:---:|:---:|
-| ![Dashboard](./screenshots/dashboard.png) | ![Analyze](./screenshots/analyze.png) |
+| ![Dashboard](./Screenshots/dashboard.png) | ![Analyze](./Screenshots/analyze.png) |
 
 | Review | Action Plan |
 |:---:|:---:|
-| ![Review](./screenshots/review.png) | ![Action Plan](./screenshots/action-plan.png) |
+| ![Review](./Screenshots/review.png) | ![Action Plan](./Screenshots/action-plan.png) |
 
 | Chat with Citations |
 |:---:|
-| ![Chat](./screenshots/chat.png) |
+| ![Chat](./Screenshots/chat.png) |
 
 ---
 
