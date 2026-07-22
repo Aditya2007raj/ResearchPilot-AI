@@ -1,78 +1,63 @@
 import chromadb
+import re
 from ..config import settings
 
 
 class ChromaClient:
-    """Client for interacting with ChromaDB."""
+    """Client for interacting with user-isolated ChromaDB collections."""
     
     def __init__(self):
         """Initialize ChromaDB client with persistent storage."""
         try:
             self.client = chromadb.PersistentClient(path=settings.chroma_persist_dir)
-            self.collection = self._get_or_create_collection()
         except Exception as e:
             raise Exception(f"Failed to initialize ChromaDB client: {str(e)}")
     
-    def _get_or_create_collection(self):
+    def _sanitize_collection_name(self, user_id: str) -> str:
+        """Sanitize user_id to form a valid ChromaDB collection name."""
+        clean_id = re.sub(r'[^a-zA-Z0-9_-]', '', user_id)
+        collection_name = f"user_{clean_id}"
+        # Ensure length is within limits (3 to 63 chars)
+        return collection_name[:63]
+
+    def get_user_collection(self, user_id: str):
         """
-        Get or create the research_papers collection.
+        Get or create a dedicated ChromaDB collection for a specific user.
         
+        Args:
+            user_id: Unique identifier for the user
+            
         Returns:
-            ChromaDB collection
+            ChromaDB collection for the user
         """
         try:
+            name = self._sanitize_collection_name(user_id)
             collection = self.client.get_or_create_collection(
-                name=settings.collection_name,
-                metadata={"description": "Research papers for RAG"}
+                name=name,
+                metadata={"user_id": user_id, "description": "User isolated research paper vector storage"}
             )
             return collection
         except Exception as e:
-            raise Exception(f"Failed to get or create collection: {str(e)}")
-    
-    def get_collection(self):
-        """
-        Get the ChromaDB collection.
-        
-        Returns:
-            ChromaDB collection
-        """
-        return self.collection
-    
-    def add_documents(self, ids: list, documents: list, metadatas: list = None, embeddings: list = None):
-        """
-        Add documents to the collection.
-        
-        Args:
-            ids: List of document IDs
-            documents: List of document texts
-            metadatas: Optional list of metadata dictionaries
-            embeddings: Optional list of pre-generated embeddings
-        """
+            raise Exception(f"Failed to get or create user collection: {str(e)}")
+
+    def add_documents(self, user_id: str, ids: list, documents: list, metadatas: list = None, embeddings: list = None):
+        """Add documents to a user's isolated collection."""
         try:
-            self.collection.add(
+            collection = self.get_user_collection(user_id)
+            collection.add(
                 ids=ids,
                 documents=documents,
                 metadatas=metadatas,
                 embeddings=embeddings
             )
         except Exception as e:
-            raise Exception(f"Failed to add documents: {str(e)}")
-    
-    def query_documents(self, query_texts: list = None, query_embeddings: list = None, n_results: int = 5, where: dict = None):
-        """
-        Query documents from the collection.
-        
-        Args:
-            query_texts: Optional list of query texts (auto-embedded)
-            query_embeddings: Optional list of pre-computed query embeddings
-            n_results: Number of results to return
-            where: Optional metadata filter
-            
-        Returns:
-            Query results with documents, metadatas, and distances
-        """
+            raise Exception(f"Failed to add documents to user collection: {str(e)}")
+
+    def query_documents(self, user_id: str, query_texts: list = None, query_embeddings: list = None, n_results: int = 5, where: dict = None):
+        """Query documents exclusively from a user's isolated collection."""
         try:
-            results = self.collection.query(
+            collection = self.get_user_collection(user_id)
+            results = collection.query(
                 query_texts=query_texts,
                 query_embeddings=query_embeddings,
                 n_results=n_results,
@@ -81,16 +66,12 @@ class ChromaClient:
             )
             return results
         except Exception as e:
-            raise Exception(f"Failed to query documents: {str(e)}")
-    
-    def delete_documents(self, ids: list):
-        """
-        Delete documents from the collection.
-        
-        Args:
-            ids: List of document IDs to delete
-        """
+            raise Exception(f"Failed to query user collection: {str(e)}")
+
+    def delete_documents(self, user_id: str, ids: list):
+        """Delete documents from a user's isolated collection."""
         try:
-            self.collection.delete(ids=ids)
+            collection = self.get_user_collection(user_id)
+            collection.delete(ids=ids)
         except Exception as e:
-            raise Exception(f"Failed to delete documents: {str(e)}")
+            raise Exception(f"Failed to delete documents from user collection: {str(e)}")

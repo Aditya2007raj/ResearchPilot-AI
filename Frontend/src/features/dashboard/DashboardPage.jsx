@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePapersList, useDashboardStats } from '../../lib/hooks';
+import { FavoriteButton } from '../../components/common/FavoriteButton';
 import { ROUTES } from '../../lib/routes';
 import { 
   Play, 
@@ -9,8 +10,7 @@ import {
   Star, 
   Compass, 
   ChevronRight, 
-  Activity,
-  Heart
+  Activity
 } from 'lucide-react';
 
 export function DashboardPage() {
@@ -67,15 +67,15 @@ export function DashboardPage() {
   };
 
   return (
-    <div className="max-w-[1600px] mx-auto p-8 space-y-8 select-none">
+    <div className="max-w-[1600px] mx-auto p-8 space-y-8 select-none font-sans">
       
       {/* 1. Research Continuity Hero */}
-      <section className="p-8 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-surface)] flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div className="space-y-2">
-          <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--accent-indigo)]">
+      <section className="p-8 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-sm">
+        <div className="space-y-2 font-mono">
+          <span className="text-[10px] uppercase tracking-wider text-[var(--accent-indigo)] font-bold">
             Continue Your Research
           </span>
-          <h2 className="text-xl font-semibold tracking-tight text-[var(--text-primary)]">
+          <h2 className="text-xl font-bold tracking-tight text-[var(--text-primary)] font-sans">
             {papers.length > 0 ? papers[0].title : 'No active workspace initialized'}
           </h2>
           <p className="text-xs text-[var(--text-muted)]">
@@ -84,7 +84,7 @@ export function DashboardPage() {
         </div>
         <button 
           onClick={handleResumeResearch}
-          className="flex items-center justify-center gap-2 px-5 py-2.5 rounded bg-[var(--accent-indigo)] hover:bg-[var(--accent-indigo-hover)] text-white text-sm font-medium transition-colors cursor-pointer w-full md:w-auto shadow-sm"
+          className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--accent-indigo)] hover:bg-[var(--accent-indigo-hover)] text-white text-xs font-mono font-bold transition-all cursor-pointer w-full md:w-auto shadow-sm"
         >
           <Play className="w-4 h-4 fill-white" />
           <span>{papers.length > 0 ? 'Resume Research' : 'Start Workspace'}</span>
@@ -98,84 +98,84 @@ export function DashboardPage() {
         <div className="xl:col-span-7 space-y-8">
           
           {/* 2. Quick Actions */}
-          <section className="space-y-4">
-            <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--text-secondary)]">Quick Actions</h3>
+          <section className="space-y-4 font-mono">
+            <h3 className="text-xs uppercase tracking-wider text-[var(--text-secondary)] font-bold">Quick Actions</h3>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               <button 
                 onClick={() => navigate(ROUTES.UPLOAD)}
-                className="flex flex-col items-start p-4 rounded border border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:border-[var(--accent-indigo)] transition-all cursor-pointer group text-left"
+                className="flex flex-col items-start p-4 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:border-[var(--accent-indigo)] transition-all cursor-pointer group text-left shadow-sm"
               >
-                <div className="w-8 h-8 rounded bg-[var(--bg-base)] flex items-center justify-center mb-3 group-hover:text-[var(--accent-indigo)] transition-colors">
+                <div className="w-8 h-8 rounded-lg bg-[var(--bg-base)] flex items-center justify-center mb-3 group-hover:text-[var(--accent-indigo)] transition-colors">
                   <Upload className="w-4 h-4" />
                 </div>
-                <span className="text-sm font-medium text-[var(--text-primary)]">Upload Paper</span>
+                <span className="text-xs font-bold text-[var(--text-primary)]">Upload Paper</span>
                 <span className="text-[10px] text-[var(--text-muted)] mt-1">Initialize Workspace</span>
               </button>
 
               <button 
                 onClick={() => navigate(ROUTES.DASHBOARD)}
-                className="flex flex-col items-start p-4 rounded border border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:border-[var(--accent-indigo)] transition-all cursor-pointer group text-left"
+                className="flex flex-col items-start p-4 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:border-[var(--accent-indigo)] transition-all cursor-pointer group text-left shadow-sm"
               >
-                <div className="w-8 h-8 rounded bg-[var(--bg-base)] flex items-center justify-center mb-3 group-hover:text-[var(--accent-indigo)] transition-colors">
+                <div className="w-8 h-8 rounded-lg bg-[var(--bg-base)] flex items-center justify-center mb-3 group-hover:text-[var(--accent-indigo)] transition-colors">
                   <BookOpen className="w-4 h-4" />
                 </div>
-                <span className="text-sm font-medium text-[var(--text-primary)]">Browse Papers</span>
+                <span className="text-xs font-bold text-[var(--text-primary)]">Browse Papers</span>
                 <span className="text-[10px] text-[var(--text-muted)] mt-1">View local library</span>
               </button>
 
               <button 
                 onClick={() => navigate(ROUTES.FAVORITES)}
-                className="flex flex-col items-start p-4 rounded border border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:border-[var(--accent-indigo)] transition-all cursor-pointer group text-left"
+                className="flex flex-col items-start p-4 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:border-[var(--accent-indigo)] transition-all cursor-pointer group text-left shadow-sm"
               >
-                <div className="w-8 h-8 rounded bg-[var(--bg-base)] flex items-center justify-center mb-3 group-hover:text-[var(--accent-indigo)] transition-colors">
+                <div className="w-8 h-8 rounded-lg bg-[var(--bg-base)] flex items-center justify-center mb-3 group-hover:text-[var(--accent-indigo)] transition-colors">
                   <Star className="w-4 h-4" />
                 </div>
-                <span className="text-sm font-medium text-[var(--text-primary)]">Favorites</span>
+                <span className="text-xs font-bold text-[var(--text-primary)]">Favorites</span>
                 <span className="text-[10px] text-[var(--text-muted)] mt-1">Starred research</span>
               </button>
 
               <button 
                 onClick={handleResumeResearch}
-                className="flex flex-col items-start p-4 rounded border border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:border-[var(--accent-indigo)] transition-all cursor-pointer group text-left"
+                className="flex flex-col items-start p-4 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:border-[var(--accent-indigo)] transition-all cursor-pointer group text-left shadow-sm"
               >
-                <div className="w-8 h-8 rounded bg-[var(--bg-base)] flex items-center justify-center mb-3 group-hover:text-[var(--accent-indigo)] transition-colors">
+                <div className="w-8 h-8 rounded-lg bg-[var(--bg-base)] flex items-center justify-center mb-3 group-hover:text-[var(--accent-indigo)] transition-colors">
                   <Compass className="w-4 h-4" />
                 </div>
-                <span className="text-sm font-medium text-[var(--text-primary)]">Recent Workspace</span>
+                <span className="text-xs font-bold text-[var(--text-primary)]">Recent Workspace</span>
                 <span className="text-[10px] text-[var(--text-muted)] mt-1">Jump to active file</span>
               </button>
             </div>
           </section>
 
           {/* 3. Recent Papers List */}
-          <section className="space-y-4">
-            <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--text-secondary)]">Recent Papers</h3>
+          <section className="space-y-4 font-mono">
+            <h3 className="text-xs uppercase tracking-wider text-[var(--text-secondary)] font-bold">Recent Papers</h3>
             
             {papersLoading ? (
-              <div className="border border-[var(--border-subtle)] rounded-lg bg-[var(--bg-surface)] p-8 text-center text-xs font-mono text-[var(--text-muted)]">
+              <div className="border border-[var(--border-subtle)] rounded-xl bg-[var(--bg-surface)] p-8 text-center text-xs text-[var(--text-muted)] animate-pulse">
                 Loading research database...
               </div>
             ) : papers.length === 0 ? (
-              <div className="border border-[var(--border-subtle)] border-dashed rounded-lg bg-[var(--bg-surface)]/40 p-12 text-center space-y-3">
-                <p className="text-xs font-mono text-[var(--text-secondary)]">No papers uploaded to library catalog yet</p>
+              <div className="border border-[var(--border-subtle)] border-dashed rounded-xl bg-[var(--bg-surface)]/40 p-12 text-center space-y-3">
+                <p className="text-xs text-[var(--text-secondary)]">No papers uploaded to library catalog yet</p>
                 <button
                   onClick={() => navigate(ROUTES.UPLOAD)}
-                  className="px-4 py-2 text-xs font-medium text-white bg-[var(--accent-indigo)] hover:bg-[var(--accent-indigo-hover)] rounded transition-colors cursor-pointer"
+                  className="px-4 py-2 text-xs font-bold text-white bg-[var(--accent-indigo)] hover:bg-[var(--accent-indigo-hover)] rounded-lg transition-colors cursor-pointer"
                 >
                   Upload First Paper
                 </button>
               </div>
             ) : (
-              <div className="border border-[var(--border-subtle)] rounded-lg bg-[var(--bg-surface)] overflow-hidden">
+              <div className="border border-[var(--border-subtle)] rounded-xl bg-[var(--bg-surface)] overflow-hidden shadow-sm">
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse">
                     <thead>
                       <tr className="border-b border-[var(--border-subtle)] bg-[var(--bg-base)]/50">
-                        <th className="p-4 text-xs font-mono uppercase tracking-wider text-[var(--text-secondary)]">Title & Authors</th>
-                        <th className="p-4 text-xs font-mono uppercase tracking-wider text-[var(--text-secondary)]">Year</th>
-                        <th className="p-4 text-xs font-mono uppercase tracking-wider text-[var(--text-secondary)]">Uploaded</th>
-                        <th className="p-4 text-xs font-mono uppercase tracking-wider text-[var(--text-secondary)]">Research Health</th>
-                        <th className="p-4"></th>
+                        <th className="p-4 text-xs uppercase tracking-wider text-[var(--text-secondary)] font-bold">Title & Authors</th>
+                        <th className="p-4 text-xs uppercase tracking-wider text-[var(--text-secondary)] font-bold">Year</th>
+                        <th className="p-4 text-xs uppercase tracking-wider text-[var(--text-secondary)] font-bold">Uploaded</th>
+                        <th className="p-4 text-xs uppercase tracking-wider text-[var(--text-secondary)] font-bold">Research Health</th>
+                        <th className="p-4 text-right text-xs uppercase tracking-wider text-[var(--text-secondary)] font-bold">Actions</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-[var(--border-subtle)]">
@@ -187,15 +187,15 @@ export function DashboardPage() {
                         >
                           <td className="p-4 max-w-[280px]">
                             <div className="flex flex-col gap-1">
-                              <span className="text-sm font-medium text-[var(--text-primary)] group-hover:text-[var(--accent-indigo)] transition-colors truncate">
+                              <span className="text-xs font-bold text-[var(--text-primary)] group-hover:text-[var(--accent-indigo)] transition-colors truncate font-sans">
                                 {paper.title}
                               </span>
-                              <span className="text-xs text-[var(--text-muted)]">
+                              <span className="text-[10px] text-[var(--text-muted)] truncate">
                                 {paper.authors}
                               </span>
                             </div>
                           </td>
-                          <td className="p-4 text-xs font-mono text-[var(--text-secondary)]">
+                          <td className="p-4 text-xs text-[var(--text-secondary)]">
                             {paper.year || '2026'}
                           </td>
                           <td className="p-4 text-xs text-[var(--text-secondary)]">
@@ -207,10 +207,8 @@ export function DashboardPage() {
                             </span>
                           </td>
                           <td className="p-4 text-right">
-                            <div className="flex items-center justify-end gap-3">
-                              {paper.favorite === 1 && (
-                                <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" />
-                              )}
+                            <div className="flex items-center justify-end gap-2">
+                              <FavoriteButton paperId={paper.id} isFavorite={paper.favorite === 1} size="md" />
                               <ChevronRight className="w-4 h-4 text-[var(--text-muted)] group-hover:text-[var(--text-primary)] transition-colors" />
                             </div>
                           </td>
@@ -226,14 +224,14 @@ export function DashboardPage() {
         </div>
 
         {/* Right Column / Sidebar (30% weight / 3 cols) */}
-        <div className="xl:col-span-3 space-y-8">
+        <div className="xl:col-span-3 space-y-8 font-mono">
           
           {/* 4. Statistics */}
           <section className="space-y-4">
-            <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--text-secondary)]">Statistics</h3>
+            <h3 className="text-xs uppercase tracking-wider text-[var(--text-secondary)] font-bold">Statistics</h3>
             <div className="grid grid-cols-2 gap-4">
               {dashboardStats.map((stat) => (
-                <div key={stat.label} className="p-4 rounded border border-[var(--border-subtle)] bg-[var(--bg-surface)]">
+                <div key={stat.label} className="p-4 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-sm">
                   {statsLoading ? (
                     <div className="h-8 w-12 bg-[var(--bg-base)] animate-pulse rounded" />
                   ) : (
@@ -245,10 +243,10 @@ export function DashboardPage() {
             </div>
           </section>
 
-          {/* 5. Activity Feed (Polished simple feed) */}
+          {/* 5. Activity Feed */}
           <section className="space-y-4">
-            <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--text-secondary)]">Activity Feed</h3>
-            <div className="p-6 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-surface)]">
+            <h3 className="text-xs uppercase tracking-wider text-[var(--text-secondary)] font-bold">Activity Feed</h3>
+            <div className="p-6 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-sm">
               <div className="flow-root">
                 {papers.length === 0 ? (
                   <div className="text-xs font-mono text-[var(--text-muted)] text-center py-4">No recent activity.</div>
@@ -267,7 +265,7 @@ export function DashboardPage() {
                               </span>
                             </div>
                             <div className="flex-1 min-w-0 pt-1.5">
-                              <p className="text-xs text-[var(--text-primary)] leading-relaxed">
+                              <p className="text-xs text-[var(--text-primary)] leading-relaxed font-sans">
                                 Ingested paper: "{paper.title}"
                               </p>
                               <span className="text-[10px] text-[var(--text-muted)] font-mono block mt-1">

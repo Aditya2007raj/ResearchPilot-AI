@@ -2,43 +2,19 @@ import React from 'react';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 import { ROUTES } from '../lib/routes';
 import { AppShell } from '../components/layout/AppShell';
+import { LandingPage } from '../features/landing/LandingPage';
+import { LoginPage } from '../features/auth/LoginPage';
+import { RegisterPage } from '../features/auth/RegisterPage';
+import { ProtectedRoute } from '../components/auth/ProtectedRoute';
 import { UploadPage } from '../features/upload/UploadPage';
 import { DashboardPage } from '../features/dashboard/DashboardPage';
+import { ProfilePage } from '../features/profile/ProfilePage';
+import { FavoritesPage } from '../features/favorites/FavoritesPage';
 import { WorkspaceLayout } from '../features/workspace/WorkspaceLayout';
 import { AnalyzePage } from '../features/workspace/analyze/AnalyzePage';
 import { ReviewPage } from '../features/workspace/review/ReviewPage';
 import { ActionPlanPage } from '../features/workspace/action-plan/ActionPlanPage';
 import { ChatPage } from '../features/workspace/chat/ChatPage';
-
-
-function FavoritesPlaceholder() {
-  return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold mb-4">Favorites</h1>
-      <p className="text-[var(--text-secondary)]">Your starred papers will appear here.</p>
-    </div>
-  );
-}
-
-function SettingsPlaceholder() {
-  return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold mb-4">Settings</h1>
-      <p className="text-[var(--text-secondary)]">Application configurations.</p>
-    </div>
-  );
-}
-
-function WorkspacePlaceholder() {
-  return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold mb-4">Workspace</h1>
-      <p className="text-[var(--text-secondary)]">Research Operating System Workspace.</p>
-    </div>
-  );
-}
-
-import { LandingPage } from '../features/landing/LandingPage';
 
 const router = createBrowserRouter([
   {
@@ -46,7 +22,19 @@ const router = createBrowserRouter([
     element: <LandingPage />,
   },
   {
-    element: <AppShell />,
+    path: ROUTES.LOGIN,
+    element: <LoginPage />,
+  },
+  {
+    path: ROUTES.REGISTER,
+    element: <RegisterPage />,
+  },
+  {
+    element: (
+      <ProtectedRoute>
+        <AppShell />
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: ROUTES.DASHBOARD,
@@ -58,11 +46,11 @@ const router = createBrowserRouter([
       },
       {
         path: ROUTES.FAVORITES,
-        element: <FavoritesPlaceholder />,
+        element: <FavoritesPage />,
       },
       {
-        path: ROUTES.SETTINGS,
-        element: <SettingsPlaceholder />,
+        path: ROUTES.PROFILE,
+        element: <ProfilePage />,
       },
       {
         path: ROUTES.WORKSPACE,

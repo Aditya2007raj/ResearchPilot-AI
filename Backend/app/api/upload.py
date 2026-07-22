@@ -1,54 +1,40 @@
-from fastapi import APIRouter, UploadFile, File, HTTPException
+from fastapi import APIRouter, UploadFile, File, HTTPException, Depends
 from datetime import datetime
 import os
+import math
 
 from ..models.schemas import UploadResponse
-from ..utils.file_utils import validate_file, save_upload_file
+from ..utils.file_utils import validate_file, save_upload_file_for_user
 from ..config import settings
 from ..services.pdf_processor import PDFProcessor
 from ..db.vector_store import VectorStore
+from ..db.metadata_store import add_paper
+from ..security.dependencies import get_current_user
 
 router = APIRouter()
 
-# Ensure uploads directory exists
-os.makedirs(settings.upload_dir, exist_ok=True)
-
 
 @router.post("/upload/pdf", response_model=UploadResponse)
-async def upload_pdf(file: UploadFile = File(...)):
-    """Upload a PDF research paper."""
+async def upload_pdf(
+    file: UploadFile = File(...),
+    current_user: dict = Depends(get_current_user)
+):
+    """Upload a PDF research paper bound to authenticated user."""
+    user_id = current_user["id"]
     try:
-        # Validate file
         validate_file(file)
         
-        # Save file
-        file_id = save_upload_file(file, settings.upload_dir)
-        
-        # Locate the saved PDF file
-        files = os.listdir(settings.upload_dir)
-        matching_file = None
-        for filename in files:
-            if filename.startswith(file_id):
-                matching_file = filename
-                break
-        
-        if not matching_file:
-            raise HTTPException(status_code=500, detail="Failed to locate saved file")
-        
-        file_path = os.path.join(settings.upload_dir, matching_file)
+        # Save file in user's isolated upload directory
+        file_id, file_path = save_upload_file_for_user(file, settings.upload_dir, user_id)
         
         # Extract text from PDF
         pdf_processor = PDFProcessor()
         extraction_result = pdf_processor.extract_text(file_path)
         full_text = extraction_result["full_text"]
         
-        # Index document in vector store
+        # Index document in user's isolated vector store collection
         vector_store = VectorStore()
-        vector_store.add_document(file_id=file_id, text=full_text)
-        
-        # Save metadata into SQLite store
-        import math
-        from ..db.metadata_store import add_paper
+        vector_store.add_document(user_id=user_id, file_id=file_id, text=full_text)
         
         clean_title = file.filename.replace(".pdf", "").replace("-", " ").replace("_", " ")
         clean_title = " ".join([w.capitalize() for w in clean_title.split()])
@@ -59,8 +45,10 @@ async def upload_pdf(file: UploadFile = File(...)):
         if reading_time_minutes == 0:
             reading_time_minutes = 1
         
+        # Save metadata into SQLite store with user_id
         add_paper(
             paper_id=file_id,
+            user_id=user_id,
             title=clean_title,
             authors="Extracted PDF Author",
             year="2026",

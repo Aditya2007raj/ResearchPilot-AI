@@ -7,3 +7,7 @@ pymupdf
 google-generativeai
 chromadb
 sentence-transformers
+pyjwt
+passlib[bcrypt]
+bcrypt
+email-validator

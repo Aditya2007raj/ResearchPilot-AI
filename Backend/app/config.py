@@ -21,6 +21,11 @@ class Settings(BaseSettings):
     gemini_api_keys: str = ""
     gemini_model: str = "gemini-2.5-flash"
 
+    # Security & Auth
+    secret_key: str = "researchpilot_super_secret_jwt_key_2026_change_in_production"
+    algorithm: str = "HS256"
+    access_token_expire_minutes: int = 1440  # 24 hours
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"

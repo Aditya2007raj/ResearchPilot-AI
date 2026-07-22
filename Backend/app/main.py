@@ -1,25 +1,35 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from datetime import datetime
+import os
 
 from .config import settings
 
+from .api import auth
 from .api import upload
 from .api import analysis
 from .api import review
 from .api import action
 from .api import chat
 from .api import papers
+from .api import favorites
 from .db.metadata_store import init_db
 
 # Initialize metadata tables
 init_db()
+
+# Ensure uploads directory exists
+os.makedirs(settings.upload_dir, exist_ok=True)
 
 app = FastAPI(
     title=settings.app_name,
     version=settings.app_version,
     description="AI-powered Research Paper Assistant API"
 )
+
+# Mount static uploads directory for serving avatar images
+app.mount("/static", StaticFiles(directory=settings.upload_dir), name="static")
 
 # CORS configuration
 app.add_middleware(
@@ -35,6 +45,18 @@ app.add_middleware(
 )
 
 # Include routers
+app.include_router(
+    auth.router,
+    prefix=settings.api_prefix,
+    tags=["auth"]
+)
+
+app.include_router(
+    favorites.router,
+    prefix=settings.api_prefix,
+    tags=["favorites"]
+)
+
 app.include_router(
     upload.router,
     prefix=settings.api_prefix,

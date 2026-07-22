@@ -1,21 +1,49 @@
+# ===========================
 # Python
+# ===========================
 __pycache__/
 *.pyc
-.venv/
-env/
+*.pyo
+*.pyd
 
-# Environment
+# ===========================
+# Virtual Environment
+# ===========================
+.venv/
+venv/
+
+# ===========================
+# Environment Variables
+# ===========================
 .env
 
+# ===========================
+# ChromaDB
+# ===========================
+Backend/chroma_db/
+chroma_db/
+
+# ===========================
+# SQLite Runtime Databases
+# ===========================
+Backend/metadata.db
+metadata.db
+*.sqlite3
+
+# ===========================
 # Uploads
+# ===========================
 Backend/uploads/
+uploads/
 
-# Node
-node_modules/
-
-# VS Code
-.vscode/
-
+# ===========================
 # OS
+# ===========================
 .DS_Store
 Thumbs.db
+
+# ===========================
+# Node
+# ===========================
+node_modules/
+dist/

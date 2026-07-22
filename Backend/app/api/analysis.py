@@ -1,46 +1,33 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 import os
 from datetime import datetime
 
 from ..services.pdf_processor import PDFProcessor
 from ..services.summarizer import Summarizer
-from ..config import settings
+from ..security.dependencies import get_current_user, verify_paper_ownership
 
 router = APIRouter()
 
 
 @router.get("/analysis/{file_id}/summary")
-async def get_summary(file_id: str):
+async def get_summary(
+    file_id: str,
+    current_user: dict = Depends(get_current_user)
+):
     """
-    Generate a structured summary for an uploaded PDF.
-    
-    Args:
-        file_id: UUID of the uploaded file
-        
-    Returns:
-        Structured summary with problem, method, results, limitations, future_work
+    Generate a structured summary for an uploaded PDF. Verify paper ownership first.
     """
-    # Find the uploaded file
-    files = os.listdir(settings.upload_dir)
-    matching_file = None
+    paper = await verify_paper_ownership(file_id, current_user)
+    file_path = paper["file_path"]
     
-    for filename in files:
-        if filename.startswith(file_id):
-            matching_file = filename
-            break
-    
-    if not matching_file:
-        raise HTTPException(status_code=404, detail="File not found")
-    
-    file_path = os.path.join(settings.upload_dir, matching_file)
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="Paper file not found")
     
     try:
-        # Extract text from PDF
         pdf_processor = PDFProcessor()
         extraction_result = pdf_processor.extract_text(file_path)
         full_text = extraction_result["full_text"]
         
-        # Generate summary
         summarizer = Summarizer()
         summary = summarizer.generate_summary(full_text)
         

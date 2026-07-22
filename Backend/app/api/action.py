@@ -1,46 +1,33 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 import os
 from datetime import datetime
 
 from ..services.pdf_processor import PDFProcessor
 from ..services.action_generator import ActionGenerator
-from ..config import settings
+from ..security.dependencies import get_current_user, verify_paper_ownership
 
 router = APIRouter()
 
 
 @router.get("/analysis/{file_id}/action-plan")
-async def get_action_plan(file_id: str):
+async def get_action_plan(
+    file_id: str,
+    current_user: dict = Depends(get_current_user)
+):
     """
-    Generate an action plan for an uploaded PDF.
-    
-    Args:
-        file_id: UUID of the uploaded file
-        
-    Returns:
-        Structured action plan with skills_to_learn, learning_path, project_ideas, estimated_timeline, recommended_resources
+    Generate an action plan for an uploaded PDF. Verify paper ownership first.
     """
-    # Find the uploaded file
-    files = os.listdir(settings.upload_dir)
-    matching_file = None
+    paper = await verify_paper_ownership(file_id, current_user)
+    file_path = paper["file_path"]
     
-    for filename in files:
-        if filename.startswith(file_id):
-            matching_file = filename
-            break
-    
-    if not matching_file:
-        raise HTTPException(status_code=404, detail="File not found")
-    
-    file_path = os.path.join(settings.upload_dir, matching_file)
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="Paper file not found")
     
     try:
-        # Extract text from PDF
         pdf_processor = PDFProcessor()
         extraction_result = pdf_processor.extract_text(file_path)
         full_text = extraction_result["full_text"]
         
-        # Generate action plan
         action_generator = ActionGenerator()
         action_plan = action_generator.generate_action_plan(full_text)
         
