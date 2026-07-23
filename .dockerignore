@@ -1,0 +1,40 @@
+# Byte-compiled / optimized files
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache
+
+# Virtual environment & Git
+.venv
+venv
+ENV
+.git
+.gitignore
+
+# Local storage and persistent databases
+uploads/
+chroma_db/
+metadata.db
+*.db
+*.sqlite3
+temp/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Node & Frontend build artifacts
+node_modules/
+Frontend/
+dist/
+build/
+screenshots/
+docs/
+
+# IDE & OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
